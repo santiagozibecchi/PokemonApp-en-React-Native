@@ -1,7 +1,9 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SimplePokemon } from '../interfaces/pokemonInterfaces';
 import { FadeInImage } from './FadeInImage';
+import { getImageColors } from '../helpers/getColors';
+import ImageColors from 'react-native-image-colors';
 
 const windownWidth = Dimensions.get('window').width;
 
@@ -12,15 +14,36 @@ interface Props {
 const PokemonCard = ({ pokemon }: Props) => {
 
      const [bgColor, setBgColor] = useState('grey');
+     const isMounted = useRef(true);
 
      // useEffect porque voy a disparar un efecto secundario en la pantalla,
      // en este caso -> cambiar el color
 
+     // const getCardColors = async () => {
+
+     //      const [cardColor] = await getImageColors(pokemon.picture);
+     //      setBgColor(cardColor || 'grey');
+
+     // };
+
+
+
      useEffect(() => {
 
-          // IOS backgroun
+          // OTRA FORMA
+          ImageColors.getColors(pokemon.picture, { fallback: 'grey' }).
+               then(colors => {
+                    if (!isMounted.current) return;
 
-          // Android: dominant
+                    (colors.platform === 'android')
+                         ? setBgColor(colors.dominant || 'grey')
+                         : setBgColor(colors.platform || 'grey');
+               });
+          // getCardColors();
+
+          return () => {
+               isMounted.current = false;
+          };
 
      }, []);
 

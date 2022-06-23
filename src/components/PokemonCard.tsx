@@ -6,7 +6,7 @@ import { getImageColors } from '../helpers/getColors';
 import ImageColors from 'react-native-image-colors';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigator/navigator';
+import { RootStackParams } from '../navigator/TabList';
 
 const windownWidth = Dimensions.get('window').width;
 
@@ -30,8 +30,6 @@ const PokemonCard = ({ pokemon }: Props) => {
      //      setBgColor(cardColor || 'grey');
 
      // };
-
-
 
      useEffect(() => {
 
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
           marginHorizontal: 10,
           height: 120,
           marginBottom: 20,
-          borderRadius: 13,
+          borderRadius: 30,
           shadowColor: "#000",
           shadowOffset: {
                width: 0,
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
 
-          elevation: 5,
+          elevation: 6,
           // elimina todo lo que este fuera de la tarjeta
           // overflow: 'hidden',
      },

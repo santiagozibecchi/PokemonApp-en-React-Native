@@ -1,11 +1,29 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, TextInput, StyleProp, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import useDeboucedValue from '../hooks/useDeboucedValue';
 
-const SearchInput = () => {
+interface Props {
+     onDebounde: (value: string) => void;
+     style?: StyleProp<ViewStyle>
+}
+
+const SearchInput = ({ style, onDebounde }: Props) => {
+
+     const [textValue, setTextValue] = useState('');
+
+     const deboucedValue = useDeboucedValue(textValue);
+
+     useEffect(() => {
+          onDebounde(deboucedValue);
+     }, [deboucedValue]);
+
 
      return (
-          <View style={styles.container}>
+          <View style={{
+               ...styles.container,
+               ...style as any,
+          }}>
                <View style={styles.textBackgound}>
 
                     <TextInput
@@ -13,6 +31,8 @@ const SearchInput = () => {
                          style={styles.textInput}
                          autoCapitalize="none"
                          autoCorrect={false}
+                         value={textValue}
+                         onChangeText={setTextValue}
                     />
 
                     <Icon
@@ -52,7 +72,7 @@ const styles = StyleSheet.create({
      textInput: {
           flex: 1,
           fontSize: 16,
-          top: 1.1
+          top: 1.1,
      },
 });
 

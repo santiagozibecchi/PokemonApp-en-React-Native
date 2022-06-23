@@ -4,6 +4,9 @@ import { SimplePokemon } from '../interfaces/pokemonInterfaces';
 import { FadeInImage } from './FadeInImage';
 import { getImageColors } from '../helpers/getColors';
 import ImageColors from 'react-native-image-colors';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParams } from '../navigator/navigator';
 
 const windownWidth = Dimensions.get('window').width;
 
@@ -15,6 +18,8 @@ const PokemonCard = ({ pokemon }: Props) => {
 
      const [bgColor, setBgColor] = useState('grey');
      const isMounted = useRef(true);
+
+     const { navigate } = useNavigation<StackNavigationProp<RootStackParams>>();
 
      // useEffect porque voy a disparar un efecto secundario en la pantalla,
      // en este caso -> cambiar el color
@@ -33,7 +38,7 @@ const PokemonCard = ({ pokemon }: Props) => {
           // OTRA FORMA
           ImageColors.getColors(pokemon.picture, { fallback: 'grey' }).
                then(colors => {
-                    if (!isMounted.current) return;
+                    if (!isMounted.current) return
 
                     (colors.platform === 'android')
                          ? setBgColor(colors.dominant || 'grey')
@@ -51,6 +56,10 @@ const PokemonCard = ({ pokemon }: Props) => {
      return (
           <TouchableOpacity
                activeOpacity={0.85}
+               onPress={() => navigate('PokemonScreen', {
+                    SimplePokemon: pokemon,
+                    color: bgColor,
+               })}
           >
                <View style={{
                     ...styles.cardContainer,
@@ -60,7 +69,7 @@ const PokemonCard = ({ pokemon }: Props) => {
                     {/* Nombre del pokemon y ID  */}
                     <View>
                          <Text style={styles.name}>
-                              {pokemon.name}
+                              {pokemon.name[0].toLocaleUpperCase() + pokemon.name.slice(1)}
                               {'\n#' + pokemon.id}
                          </Text>
                     </View>
